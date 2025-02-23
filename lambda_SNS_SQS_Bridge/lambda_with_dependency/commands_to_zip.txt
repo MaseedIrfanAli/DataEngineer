@@ -1,0 +1,14 @@
+Commands to be followed to zip lambda code
+===========================================
+
+cd lambda_with_dependency
+
+pip3 install --target ./package requests
+# above command creates the package folder and install dependencies
+
+zip -r ../lambda_code_dep_zipped.zip .
+it zips the current dirctorry file along with python file
+
+cd ..
+
+zip lambda_code_dep_zipped.zip lambda_function.py
