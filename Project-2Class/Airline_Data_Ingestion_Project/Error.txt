@@ -1,0 +1,6 @@
+in ETL visual for change schema showing this error what is this Data preview failure.
+IllegalArgumentException - Unrecognized scheme null; expected s3, s3n, or s3a
+
+reading dev table we kept as input temp directory
+but not populated in output execution
+need to convert visual to code and save

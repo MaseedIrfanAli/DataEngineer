@@ -1,0 +1,226 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "StartCrawler",
+  "States": {
+    "StartCrawler": {
+      "Type": "Task",
+      "Arguments": {
+        "Name": "raw_daily_file_crawler"
+      },
+      "Resource": "arn:aws:states:::aws-sdk:glue:startCrawler",
+      "Next": "GetCrawler"
+    },
+    "GetCrawler": {
+      "Type": "Task",
+      "Arguments": {
+        "Name": "raw_daily_file_crawler"
+      },
+      "Resource": "arn:aws:states:::aws-sdk:glue:getCrawler",
+      "Next": "Choice"
+    },
+    "Choice": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Next": "Wait",
+          "Condition": "{% $Crawler.State='RUNNING' %}"
+        }
+      ],
+      "Default": "SNS Publish"
+    },
+    "Wait": {
+      "Type": "Wait",
+      "Seconds": 5,
+      "End": true
+    },
+    "SNS Publish": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Arguments": {
+        "TopicArn": "arn:aws:sns:eu-central-1:970547380036:first_bucket_sns",
+        "Message": {
+          "Role": "Irfan_dataengineer",
+          "status": "Crawler execution is done"
+        }
+      },
+      "End": true
+    }
+  },
+  "QueryLanguage": "JSONata"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+StateInput:
+{
+  "Crawler": {
+    "Classifiers": [],
+    "Configuration": "{\"Version\":1.0,\"CreatePartitionIndex\":true}",
+    "CrawlElapsedTime": 5494,
+    "CreationTime": "2025-02-25T13:17:46Z",
+    "DatabaseName": "airlines",
+    "LakeFormationConfiguration": {
+      "AccountId": "",
+      "UseLakeFormationCredentials": false
+    },
+    "LastCrawl": {
+      "LogGroup": "/aws-glue/crawlers",
+      "LogStream": "raw_daily_file_crawler",
+      "MessagePrefix": "3de4b204-a871-4216-8b77-b9d9e49527c4",
+      "StartTime": "2025-02-26T10:20:32Z",
+      "Status": "SUCCEEDED"
+    },
+    "LastUpdated": "2025-02-25T13:50:18Z",
+    "LineageConfiguration": {
+      "CrawlerLineageSettings": "DISABLE"
+    },
+    "Name": "raw_daily_file_crawler",
+    "RecrawlPolicy": {
+      "RecrawlBehavior": "CRAWL_EVERYTHING"
+    },
+    "Role": "service-role/AWSGlueServiceRole-irfan",
+    "SchemaChangePolicy": {
+      "DeleteBehavior": "DEPRECATE_IN_DATABASE",
+      "UpdateBehavior": "UPDATE_IN_DATABASE"
+    },
+    "State": "RUNNING",
+    "Targets": {
+      "CatalogTargets": [],
+      "DeltaTargets": [],
+      "DynamoDBTargets": [],
+      "HudiTargets": [],
+      "IcebergTargets": [],
+      "JdbcTargets": [],
+      "MongoDBTargets": [],
+      "S3Targets": [
+        {
+          "Exclusions": [],
+          "Path": "s3://airlines-dataset-ir/daily_raw/date=2025-02-25/"
+        }
+      ]
+    },
+    "Version": 3
+  }
+}
+
+StateOutput:
+
+{
+  "Crawler": {
+    "Classifiers": [],
+    "Configuration": "{\"Version\":1.0,\"CreatePartitionIndex\":true}",
+    "CrawlElapsedTime": 5494,
+    "CreationTime": "2025-02-25T13:17:46Z",
+    "DatabaseName": "airlines",
+    "LakeFormationConfiguration": {
+      "AccountId": "",
+      "UseLakeFormationCredentials": false
+    },
+    "LastCrawl": {
+      "LogGroup": "/aws-glue/crawlers",
+      "LogStream": "raw_daily_file_crawler",
+      "MessagePrefix": "3de4b204-a871-4216-8b77-b9d9e49527c4",
+      "StartTime": "2025-02-26T10:20:32Z",
+      "Status": "SUCCEEDED"
+    },
+    "LastUpdated": "2025-02-25T13:50:18Z",
+    "LineageConfiguration": {
+      "CrawlerLineageSettings": "DISABLE"
+    },
+    "Name": "raw_daily_file_crawler",
+    "RecrawlPolicy": {
+      "RecrawlBehavior": "CRAWL_EVERYTHING"
+    },
+    "Role": "service-role/AWSGlueServiceRole-irfan",
+    "SchemaChangePolicy": {
+      "DeleteBehavior": "DEPRECATE_IN_DATABASE",
+      "UpdateBehavior": "UPDATE_IN_DATABASE"
+    },
+    "State": "RUNNING",
+    "Targets": {
+      "CatalogTargets": [],
+      "DeltaTargets": [],
+      "DynamoDBTargets": [],
+      "HudiTargets": [],
+      "IcebergTargets": [],
+      "JdbcTargets": [],
+      "MongoDBTargets": [],
+      "S3Targets": [
+        {
+          "Exclusions": [],
+          "Path": "s3://airlines-dataset-ir/daily_raw/date=2025-02-25/"
+        }
+      ]
+    },
+    "Version": 3
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+  "comment": "start execution"
+}
+
+{
+  "MessageId": "76becaef-3fdc-5944-8b66-aad62e4d85ae",
+  "SdkHttpMetadata": {
+    "AllHttpHeaders": {
+      "x-amzn-RequestId": [
+        "9bc1210a-ee62-4ae1-a6c8-c1fee0fce9c3"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "Content-Length": [
+        "294"
+      ],
+      "Date": [
+        "Wed, 26 Feb 2025 12:55:45 GMT"
+      ],
+      "Content-Type": [
+        "text/xml"
+      ]
+    },
+    "HttpHeaders": {
+      "connection": "keep-alive",
+      "Content-Length": "294",
+      "Content-Type": "text/xml",
+      "Date": "Wed, 26 Feb 2025 12:55:45 GMT",
+      "x-amzn-RequestId": "9bc1210a-ee62-4ae1-a6c8-c1fee0fce9c3"
+    },
+    "HttpStatusCode": 200
+  },
+  "SdkResponseMetadata": {
+    "RequestId": "9bc1210a-ee62-4ae1-a6c8-c1fee0fce9c3"
+  }
+}

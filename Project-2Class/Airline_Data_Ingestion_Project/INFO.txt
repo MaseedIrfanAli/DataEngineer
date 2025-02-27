@@ -1,0 +1,57 @@
+.) Project - 3 : Ingest daily flight data in Redshift fact table
+    Tech Stack:
+    -> AWS S3
+    -> S3 Cloudtrail Notification
+    -> Event Bridge Pattern Rule
+    -> Glue Crawler
+    -> Glue Visual ETL
+    -> AWS SNS
+    -> AWS Redshift
+    -> AWS Step Function
+
+
+2.) Project - 4 : Maintain Data Warehouse for Logistics Data
+     Tech Stack:
+     -> GCP Storage
+     -> Airflow (GCP Composer)
+     -> Hive
+     -> GCP Dataproc
+
+3.) Project - 5 : Ingest Sales Order & Payment Data in Real Time in NoSQL Database
+     Tech Stack:
+     -> GCP Pub-Sub
+     -> Python
+     -> Docker
+     -> Cassandra
+
+
+
+create schema airlines;
+
+CREATE TABLE airlines.airports_dim (
+    airport_id BIGINT,
+    city VARCHAR(100),
+    state VARCHAR(100),
+    name VARCHAR(200)
+);
+
+COPY airlines.airports_dim
+FROM 's3://airlines-dataset-ir/airports.csv' 
+IAM_ROLE 'arn:aws:iam::970547380036:role/redshift_role_irfan'
+DELIMITER ','
+IGNOREHEADER 1
+REGION 'eu-central-1';
+
+--------------
+
+CREATE TABLE airlines.daily_flights_fact (
+    carrier VARCHAR(10),
+    dep_airport VARCHAR(200),
+    arr_airport VARCHAR(200),
+    dep_city VARCHAR(100),
+    arr_city VARCHAR(100),
+    dep_state VARCHAR(100),
+    arr_state VARCHAR(100),
+    dep_delay BIGINT,
+    arr_delay BIGINT
+);
